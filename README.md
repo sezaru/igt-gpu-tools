@@ -16,3 +16,28 @@
 
 - Run `rpm-ostree install igt-gpu-tools-<version>.fc40.x86_64.rpm`
 
+# Install boot service
+
+- Run `sudo touch /etc/systemd/system/intel-gpu-frequency.service`
+- Run `sudo chmod 664 /etc/systemd/system/intel-gpu-frequency.service`
+
+- Open the service file and replace with:
+
+``` sh
+[Unit]
+Description=Set Intel GPU frequency 
+
+[Service]
+ExecStart=/usr/bin/intel_gpu_frequency --c min=300
+
+[Install]
+WantedBy=multi-user.target
+```
+
+- Run `sudo systemctl daemon-reload`
+- Run `sudo systemctl start intel-gpu-frequency`
+- Run `sudo systemctl enable intel-gpu-frequency`
+
+# Check if frequency is correctly set
+
+- Run `sudo intel_gpu_frequency --get cur,min,max,eff`
